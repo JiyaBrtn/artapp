@@ -1,0 +1,623 @@
+<!doctype html>
+<!--
+  FILIPINO ARTS AND CRAFTS
+
+  Files (keep them together in one folder so the site works offline):
+  1. index.html   - page markup: navigation, collections, games, creators, shared controls.
+  2. styles.css   - fonts, colors, layout, responsive rules, dark mode, audio controls.
+  3. script.js    - theme, content data (DATA object), rendering, and games.
+  4. recordings.js - embedded instrument audio (loaded before script.js).
+  5. comments-config.js - optional Supabase URL and anon key for the shared wall.
+  6. supabase-setup.sql - run once in Supabase to create the wall table and rules.
+
+  Edit names, descriptions, questions, and creator profiles in the DATA object in script.js.
+  Images and fonts use embedded data URLs; recordings.js contains embedded audio.
+  comments-config.js holds the optional Supabase keys for the shared insight wall.
+  Without those keys, learner insights stay in the visitor's browser (localStorage).
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="description"
+      content="Discover Filipino art, traditional instruments, natural materials, regional crafts, and the people who keep our heritage alive. An offline educational collection."
+    />
+    <title>The Filipino Arts and Crafts — Discover the Art, Preserve the Heritage</title>
+    <link rel="stylesheet" href="styles.css?v=20261029e" />
+  </head>
+  <body>
+    <!-- PAGE MARKUP -->
+    <a class="skip" href="#content">Skip to the collection</a>
+    <div class="textile masthead-pattern" aria-hidden="true"></div>
+    <!-- Main navigation -->
+    <header class="header">
+      <nav class="nav wrap" aria-label="Main navigation">
+        <a class="brand" href="#home" aria-label="The Filipino Arts and Crafts home"
+          ><svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <path
+              d="M20 2 38 20 20 38 2 20Z M20 9 31 20 20 31 9 20Z M20 16 24 20 20 24 16 20Z"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path d="M2 2h9v9H2zm27 0h9v9h-9zM2 29h9v9H2zm27 0h9v9h-9z" fill="currentColor" /></svg
+          ><span>THE FILIPINO<br />ARTS AND CRAFTS</span></a
+        >
+        <div class="nav-actions">
+          <div class="nav-links" id="nav-links">
+            <a href="#home" class="active" aria-current="page">HOME</a><a href="#content">CONTENT</a
+            ><a href="#play">PLAY</a><a href="#creators">CREATORS</a
+            ><a href="#insights">SHARE</a>
+          </div>
+          <button
+            type="button"
+            id="theme-toggle"
+            class="theme-toggle"
+            aria-label="Dark mode"
+            aria-pressed="false"
+            title="Switch to dark mode"
+          >
+            <svg
+              class="theme-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M20.6 14A8.6 8.6 0 0 1 10 3.4 8.7 8.7 0 1 0 20.6 14Z" /></svg
+            ><svg
+              class="theme-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+              />
+            </svg>
+          </button>
+          <button
+            class="menu-toggle"
+            id="menu-toggle"
+            aria-expanded="false"
+            aria-controls="nav-links"
+            aria-label="Open navigation"
+          >
+            ☰
+          </button>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <!-- Home and introduction -->
+      <section id="home" aria-labelledby="hero-title">
+        <div class="hero wrap">
+          <div class="hero-copy">
+            <h1 id="hero-title">THE FILIPINO ARTS<br />AND CRAFTS</h1>
+            <p class="hero-tagline">Discover the Art, Preserve the Heritage</p>
+            <a href="#content" class="btn"
+              >EXPLORE FILIPINO ARTS <span class="arrow" aria-hidden="true">↗</span></a
+            >
+          </div>
+          <div class="hero-visual">
+              <img
+                class="hero-image"
+                src="homepag2.jpg"
+                alt="Filipino traditional dancers and musical instruments"
+              >
+          </div>
+        </div>
+        <div class="intro wrap">
+          <h2>DISCOVER FILIPINO ART</h2>
+          <p>
+            Indigenous arts have greatly influenced Filipino life and culture. They are considered
+            labors of love and patience because they require skill, creativity, and careful
+            craftsmanship. Filipino tribes create intricate carvings using wood, metal, stone, and
+            glass, as well as musical instruments made from bamboo, animal skin, seeds, and
+            seashells. These instruments are commonly used in tribal dances and rituals. These
+            traditional arts and crafts represent Filipino creativity, culture, and heritage that we
+            should be proud of.
+          </p>
+        </div>
+      </section>
+      <!-- Search and educational collections -->
+      <section id="content" class="section chapter" aria-labelledby="collection-title">
+        <div class="wrap">
+          <form class="search-bar" id="search-form" role="search">
+            <label for="search" class="search-label" id="collection-title"
+              >Search the collection</label
+            >
+            <div class="search-input-label">
+              <input
+                type="search"
+                id="search"
+                placeholder="Search arts, instruments, materials…"
+                aria-label="Search by name or description"
+                autocomplete="off"
+              />
+            </div>
+            <label class="search-filter-label"
+              ><span class="sr-only">Filter collection</span
+              ><select id="search-filter">
+                <option value="all">All collections</option>
+                <option value="art">Art forms</option>
+                <option value="instrument">Instruments</option>
+                <option value="material">Materials</option>
+                <option value="craft">Regional crafts</option>
+                <option value="artist">Artists</option>
+              </select></label
+            ><button type="button" class="clear-search" id="clear-search">Clear</button>
+          </form>
+          <div id="search-results" hidden>
+            <div class="search-summary">
+              <h2>YOUR DISCOVERIES</h2>
+              <p id="search-status" role="status" aria-live="polite"></p>
+            </div>
+            <div id="results-grid" class="grid"></div>
+          </div>
+          <div id="browse-content">
+            <!-- Pre-colonial arts -->
+            <section aria-labelledby="arts-title">
+              <div class="section-heading">
+                <div>
+                  <span class="chapter-no">01 / MOVEMENT, MUSIC & RITUAL</span>
+                  <h2 id="arts-title">PRE-COLONIAL ART FORMS</h2>
+                </div>
+                <p class="section-note">
+                  Stories told through movement.<br />Traditions kept alive together.
+                </p>
+              </div>
+              <div class="grid" id="arts-grid"></div>
+              <div class="collection-controls">
+                <button
+                  class="btn light"
+                  data-expand="arts"
+                  aria-expanded="false"
+                  aria-controls="arts-grid"
+                >
+                  SEE MORE <span aria-hidden="true">＋</span>
+                </button>
+              </div>
+            </section>
+            <!-- Instruments and recording library -->
+            <section class="instruments" aria-labelledby="instruments-title">
+              <span class="chapter-no">02 / THE SOUNDS OF OUR ISLANDS</span>
+              <h2 id="instruments-title">
+                INDIGENOUS CLASSIFICATION OF MUSICAL<br />INSTRUMENTS IN THE PHILIPPINES
+              </h2>
+              <p class="muted">
+                Four families. Many voices. Explore how each instrument creates its sound.
+              </p>
+              <div class="sound-intro">
+                <div>
+                  <h3>HEAR THE HERITAGE</h3>
+                  <p>Open a family, then press LISTEN to hear an actual instrument recording.</p>
+                </div>
+                <span class="sound-count" id="sound-library-count"></span>
+              </div>
+              <p id="recording-notice" class="recording-notice" role="status" hidden></p>
+              <div class="category-grid" id="category-grid"></div>
+              <div
+                id="instrument-collection"
+                class="instrument-collection"
+                hidden
+                aria-labelledby="instrument-category-title"
+              ></div>
+              <details class="sound-credits">
+                <summary>Recording credits & usage</summary>
+                <p>
+                  Instrument recordings are from
+                  <a
+                    href="https://katunog.asti.dost.gov.ph/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >Katunog, the DOST-ASTI and University of the Philippines instrument archive</a
+                  >. Philippine Copyright 2019 by DOST-ASTI and UP. Used for non-commercial
+                  educational purposes under the
+                  <a
+                    href="https://katunog.asti.dost.gov.ph/client/terms"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >Katunog End-User License Agreement</a
+                  >. Recordings retain their original pitch, speed, and file metadata.
+                </p>
+                <p>
+                  Each clip is attached to its recorded instrument or a documented spelling variant.
+                  Instruments without a verified clip are marked “Recording unavailable”; no
+                  substitute or synthesized sounds are used. You can add a real recording from your
+                  device using ADD RECORDING.
+                </p>
+                <ul id="sound-credit-list" class="sound-credit-list"></ul>
+              </details>
+              <div class="sound-export" id="sound-export-controls" hidden>
+                <button type="button" class="btn light small" data-export-recordings>
+                  DOWNLOAD UPDATED RECORDINGS ↓
+                </button>
+                <p>
+                  Your added recordings stay in this session. Download the updated recordings.js and
+                  replace the file in your site folder to keep them for offline use and deployment.
+                </p>
+              </div>
+            </section>
+            <!-- Natural handicraft materials -->
+            <section class="materials" aria-labelledby="materials-title">
+              <span class="chapter-no">03 / FROM NATURE, BY HAND</span>
+              <h2 id="materials-title">PHILIPPINE ARTISTIC HANDICRAFTS<br />& MATERIALS</h2>
+              <div class="importance">
+                <div class="importance-intro">
+                  <h3>IMPORTANCE OF PHILIPPINE<br />ARTISTIC HANDICRAFTS</h3>
+                </div>
+                <div class="importance-photos">
+                  <img
+                    data-asset="importance-1"
+                    alt="Handmade Philippine artistic handicraft"
+                    loading="lazy"
+                  /><img
+                    data-asset="importance-2"
+                    alt="A Filipino artisan's handcrafted work"
+                    loading="lazy"
+                  /><img
+                    data-asset="importance-3"
+                    alt="Detail of a traditional Philippine handicraft"
+                    loading="lazy"
+                  /><img
+                    data-asset="importance-4"
+                    alt="Philippine handicrafts made from natural materials"
+                    loading="lazy"
+                  />
+                </div>
+                <ol class="importance-list">
+                  <li><span>01</span>Shows creativity and ingenuity.</li>
+                  <li><span>02</span>Promotes cultural legacy.</li>
+                  <li><span>03</span>Encourages production of raw materials.</li>
+                  <li><span>04</span>Generates employment.</li>
+                  <li><span>05</span>Develops perseverance and resiliency.</li>
+                </ol>
+              </div>
+              <h3 class="materials-subtitle">COMMON HANDICRAFT MATERIALS IN THE PHILIPPINES</h3>
+              <div id="materials-grid" class="material-grid"></div>
+              <div class="collection-controls">
+                <button
+                  class="btn light"
+                  data-expand="materials"
+                  aria-expanded="false"
+                  aria-controls="materials-grid"
+                >
+                  SEE MORE <span aria-hidden="true">＋</span>
+                </button>
+              </div>
+            </section>
+            <!-- Regional crafts -->
+            <section aria-labelledby="crafts-title">
+              <div class="banner">
+                <img
+                  data-asset="p3-966"
+                  alt="A traditional artisan surrounded by richly colored woven textiles"
+                  loading="lazy"
+                  width="1100"
+                  height="620"
+                />
+                <div class="banner-text">
+                  <span class="eyebrow">04 / SKILL, PASSED FROM HAND TO HAND</span>
+                  <h2 id="crafts-title">TRADITIONAL HANDIWORK<br />& REGIONAL CRAFTS</h2>
+                </div>
+              </div>
+              <div id="crafts-list"></div>
+            </section>
+            <!-- National Living Treasures -->
+            <section aria-labelledby="gamaba-title">
+              <div class="banner gamaba-banner">
+                <img
+                  data-asset="p4-999"
+                  alt="Manlilikha ng Bayan National Living Treasures exhibition"
+                  loading="lazy"
+                  width="1100"
+                  height="620"
+                />
+                <div class="banner-text">
+                  <span class="eyebrow">05 / KEEPERS OF TRADITION</span>
+                  <h2 id="gamaba-title">GAMABA AWARDS AND<br />QUALIFICATIONS</h2>
+                </div>
+              </div>
+              <div class="gamaba-intro">
+                <p>
+                  In April 1992, the Gawad sa Manlilikha ng Bayan, or National Living Treasures
+                  Award, was institutionalized through Republic Act No. 7355. The National
+                  Commission for Culture and the Arts (NCCA) administers and implements the award.
+                </p>
+                <p>
+                  Through the Gawad sa Manlilikha ng Bayan Executive Council, the NCCA searches for
+                  the finest traditional artists, supports the transfer of their skills, and
+                  promotes appreciation and pride in the genius of the Manlilikha ng Bayan.
+                </p>
+              </div>
+              <div class="qualifications">
+                <div>
+                  <h3>QUALIFICATIONS</h3>
+                  <ol class="qualification-list">
+                    <li>Membership in an indigenous or traditional cultural community.</li>
+                    <li>A documented folk art tradition existing for at least 50 years.</li>
+                    <li>Consistent production or performance of superior-quality works.</li>
+                    <li>Mastery of tools and materials.</li>
+                    <li>An established reputation as a master practitioner.</li>
+                    <li>Ability and willingness to pass skills to the community.</li>
+                  </ol>
+                </div>
+                <div class="artist-teaser">
+                  <img data-asset="p4-2107" alt="Lang Dulay" loading="lazy" /><img
+                    data-asset="p4-2110"
+                    alt="Whang Od"
+                    loading="lazy"
+                  /><button
+                    class="btn"
+                    data-expand="artists"
+                    data-artist-view
+                    aria-expanded="false"
+                    aria-controls="artists-grid"
+                  >
+                    VIEW
+                  </button>
+                </div>
+              </div>
+              <div class="grid artists" id="artists-grid"></div>
+              <div class="collection-controls artist-collapse" hidden>
+                <button
+                  class="btn light"
+                  data-expand="artists"
+                  aria-expanded="false"
+                  aria-controls="artists-grid"
+                >
+                  VIEW ALL 17 ARTISTS <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+      <!-- Interactive learning games -->
+      <section id="play" class="play-section" aria-labelledby="play-title">
+        <div class="wrap">
+          <div class="section-heading">
+            <div>
+              <span class="chapter-no">06 / A LITTLE CURIOSITY GOES A LONG WAY</span>
+              <h2 id="play-title">PLAY. LEARN. REMEMBER.</h2>
+            </div>
+            <p class="section-note">
+              Explore Filipino arts and crafts through interactive learning activities. Every answer
+              is in the collection.
+            </p>
+          </div>
+          <div class="game-tabs" role="tablist" aria-label="Learning games">
+            <button
+              id="tab-quiz"
+              role="tab"
+              aria-selected="true"
+              aria-controls="panel-quiz"
+              data-game="quiz"
+            >
+              FILIPINO ARTS QUIZ</button
+            ><button
+              id="tab-instrument"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-instrument"
+              tabindex="-1"
+              data-game="instrument"
+            >
+              GUESS THE INSTRUMENT</button
+            ><button
+              id="tab-match"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-match"
+              tabindex="-1"
+              data-game="match"
+            >
+              MATCH THE CRAFT
+            </button>
+          </div>
+          <div
+            class="game-panel"
+            id="panel-quiz"
+            role="tabpanel"
+            aria-labelledby="tab-quiz"
+            tabindex="0"
+          ></div>
+          <div
+            class="game-panel"
+            id="panel-instrument"
+            role="tabpanel"
+            aria-labelledby="tab-instrument"
+            tabindex="0"
+            hidden
+          ></div>
+          <div
+            class="game-panel"
+            id="panel-match"
+            role="tabpanel"
+            aria-labelledby="tab-match"
+            tabindex="0"
+            hidden
+          ></div>
+        </div>
+      </section>
+      <!-- Creator profiles -->
+      <section id="creators" class="creators wrap" aria-labelledby="creators-title">
+        <div class="creator-intro">
+          <div>
+            <span class="chapter-no">07 / THE PEOPLE BEHIND THE PROJECT</span>
+            <h2 id="creators-title">MEET THE CREATORS</h2>
+          </div>
+          <p>
+            As a group, we learned that Filipino indigenous arts and crafts reflect our history, traditions, beliefs, and creativity. They represent Filipino identity through unique designs, dances, music, and handmade crafts.<br><br>
+            Preserving these traditions is important because they carry the knowledge and stories of our ancestors. As young people, we can support traditional artists by promoting their work, purchasing authentic crafts, and sharing their cultural significance.
+          </p>
+        </div>
+        <div class="creator-grid" id="creator-grid"></div>
+        <div class="acknowledgments">
+          <h3>WITH APPRECIATION</h3>
+          <p>
+            We acknowledge the artists, indigenous communities, craftspeople, photographers, and
+            image makers whose work celebrates Filipino heritage. Games and site interactions
+            support learning and discovery. This collection was created by BSCS students of
+            Surigao del Norte State University.
+          </p>
+        </div>
+      </section>
+      <!-- Learner insight comments -->
+      <section id="insights" class="insights-section" aria-labelledby="insights-title">
+        <div class="wrap">
+          <div class="insights-heading">
+            <div>
+              <span class="chapter-no">08 / LEARNERS' REFLECTIONS</span>
+              <h2 id="insights-title">SHARE YOUR INSIGHT</h2>
+            </div>
+            <p>
+              What did you learn? Which tradition, instrument, or craft stayed with you? Add your
+              reflection and read what other learners noticed.
+            </p>
+          </div>
+          <div class="insights-layout">
+            <form id="insight-form" class="insight-form" novalidate>
+              <h3>ADD YOUR REFLECTION</h3>
+              <div class="insight-field">
+                <label for="insight-name">Your name <span>(optional)</span></label>
+                <input
+                  type="text"
+                  id="insight-name"
+                  name="name"
+                  maxlength="40"
+                  autocomplete="name"
+                  placeholder="e.g. Ana, BSCS 1-A"
+                />
+              </div>
+              <div class="insight-field">
+                <label for="insight-text">Your insight</label>
+                <textarea
+                  id="insight-text"
+                  name="text"
+                  rows="5"
+                  maxlength="600"
+                  required
+                  aria-describedby="insight-count"
+                  placeholder="For example: I was surprised that the kulintang is a whole set of gongs, not just one instrument. I want to learn how it is played."
+                ></textarea>
+                <div class="insight-meta"><span id="insight-count">0 / 600</span></div>
+              </div>
+              <button type="submit" class="btn">
+                POST INSIGHT <span aria-hidden="true">↗</span>
+              </button>
+              <p id="insight-status" class="insight-status" role="status" aria-live="polite"></p>
+              <p id="insight-note" class="insight-note">
+                Insights are saved in this browser on this device only. Nothing is sent to a
+                server.
+              </p>
+            </form>
+            <div class="insight-feed">
+              <div class="insight-feed-head">
+                <h3>LEARNER INSIGHTS</h3>
+                <div class="insight-feed-tools">
+                  <span id="insight-total" class="insight-total">0 insights</span>
+                  <button
+                    type="button"
+                    id="insight-refresh"
+                    class="insight-refresh"
+                    aria-label="Refresh insights"
+                    title="Load the latest insights"
+                    hidden
+                  >
+                    ↻ Refresh
+                  </button>
+                </div>
+              </div>
+              <ul id="insight-list" class="insight-list" aria-live="polite"></ul>
+              <p id="insight-empty" class="insight-empty">
+                No insights yet. Be the first to share what you learned.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div class="textile" aria-hidden="true"></div>
+    <footer class="footer">
+      <div class="footer-row wrap">
+        <div class="brand">THE FILIPINO<br />ARTS AND CRAFTS</div>
+        <p>
+          Discover the Art, Preserve the Heritage.<br />An educational collection, made for curious
+          minds.
+        </p>
+        <a href="#home">BACK TO THE BEGINNING ↑</a>
+      </div>
+    </footer>
+    <!-- Shared dialog, scroll button, and audio player -->
+    <button id="to-top" class="to-top" aria-label="Scroll to top" hidden>↑</button>
+    <dialog id="detail-dialog" aria-labelledby="detail-title">
+      <div class="dialog-content">
+        <button type="button" id="dialog-close" class="dialog-close" aria-label="Close details">
+          ×</button
+        ><img id="detail-image" alt="" /><span id="detail-group" class="eyebrow"></span>
+        <h2 id="detail-title"></h2>
+        <p id="detail-scientific"></p>
+        <p id="detail-description"></p>
+        <div id="detail-recording" class="detail-recording" hidden></div>
+      </div>
+    </dialog>
+    <input
+      type="file"
+      id="recording-file-input"
+      accept="audio/*,.mp3,.wav,.ogg,.m4a,.flac,.webm"
+      hidden
+    />
+    <aside
+      id="instrument-player"
+      class="sound-player"
+      aria-label="Instrument recording player"
+      hidden
+    >
+      <div class="sound-player-name">
+        <span id="sound-player-state">NOW PLAYING</span><strong id="sound-player-name"></strong>
+      </div>
+      <button type="button" id="sound-player-toggle" aria-label="Pause recording">Pause</button
+      ><button type="button" id="sound-player-stop" aria-label="Stop recording">Stop</button
+      ><label class="sound-player-volume"
+        >Volume
+        <input
+          id="sound-volume"
+          type="range"
+          min="0"
+          max="100"
+          value="65"
+          aria-label="Recording volume" /></label
+      ><progress
+        id="sound-player-progress"
+        value="0"
+        max="1"
+        aria-label="Recording progress"
+      ></progress>
+    </aside>
+    <noscript
+      ><div class="wrap section">
+        <h2>EXPLORE OUR HERITAGE</h2>
+        <p>
+          This collection includes pre-colonial arts, indigenous instruments, handicraft materials,
+          regional crafts, and traditional artists. Enable JavaScript to browse the complete
+          collection and play the learning games. All content and images are embedded in the site files;
+          no internet connection is needed.
+        </p>
+      </div></noscript
+    >
+    <!-- APPLICATION SCRIPT -->
+    <script src="comments-config.js?v=20261029d"></script>
+    <script src="recordings.js?v=20261030d"></script>
+    <script src="script.js?v=20261030c"></script>
+  </body>
+</html>
