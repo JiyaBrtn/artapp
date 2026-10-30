@@ -110,20 +110,12 @@
           </div>
           <div class="hero-visual">
             <div class="hero-media-frame">
-              <video
-                class="hero-video"
-                poster="homepage2.jpg"
-                muted
-                playsinline
-                loop
-                preload="none"
-                aria-hidden="true"
-              ></video>
-              <img class="hero-fallback" src="homepage2.jpg" alt="Filipino traditional dancers performing on a spotlit stage beside a gong" hidden />
-              <noscript><img class="hero-fallback" src="homepage2.jpg" alt="Filipino traditional dancers performing on a spotlit stage beside a gong" /></noscript>
-              <button class="hero-play-toggle" type="button" aria-label="Pause hero video" aria-pressed="false">
-                <span class="hero-play-icon" aria-hidden="true">Ⅱ</span>
-              </button>
+              <img
+                class="hero-fallback"
+                src="homepage2.jpg"
+                alt="Filipino traditional dancers performing on a spotlit stage beside a gong"
+                fetchpriority="high"
+              />
             </div>
           </div>
         </div>
@@ -628,8 +620,6 @@
       </div></noscript
     >
     <!-- APPLICATION SCRIPT -->
-    <script defer src="dash.all.min.js"></script>
-    <script defer src="hero-player.js"></script>
     <script src="comments-config.js?v=20261029d"></script>
     <script src="recordings.js?v=20261030d"></script>
     <script src="script.js?v=20261030c"></script>

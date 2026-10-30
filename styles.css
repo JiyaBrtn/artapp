@@ -2863,6 +2863,12 @@ html[data-theme="dark"] [tabindex]:focus-visible {
   font-variant-numeric: tabular-nums;
   min-width: 40px;
 }
+.recording-type {
+  color: var(--brown);
+  font-size: 9px;
+  font-weight: 700;
+  white-space: nowrap;
+}
 .recording-unavailable {
   font-size: 11px;
   color: var(--muted);
@@ -3626,5 +3632,23 @@ html[data-theme="dark"] .insight-status.is-error {
   .category .btn {
     align-self: center;
     min-width: 88px;
+  }
+}
+
+@media (min-width: 801px) {
+  #home .hero.wrap {
+    width: 100%;
+    max-width: none;
+  }
+
+  #home .hero-media-frame {
+    border-inline: 0;
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 800px) {
+  #home .hero-fallback {
+    object-fit: cover;
   }
 }

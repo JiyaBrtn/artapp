@@ -1325,7 +1325,7 @@
           const recording = getRecording(r.id);
           if (!recording)
             return `<div class="sound-control-line"><span class="recording-unavailable">Recording unavailable</span><button type="button" class="recording-add" data-import-recording="${r.id}" aria-label="Add a real recording of ${escapeHTML(r.name)}">ADD RECORDING</button></div>`;
-          return `<div class="sound-control-line"><button type="button" class="listen-button" data-listen-recording="${r.id}"${mystery ? ' data-mystery-sound="true"' : ""} aria-label="${mystery ? "Play mystery instrument recording" : "Play recording of " + escapeHTML(r.name)}" aria-pressed="false">${playIcon}<span data-listen-label>${mystery ? "PLAY MYSTERY SOUND" : "LISTEN"}</span></button><span class="sound-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></span><span class="sound-time" data-sound-time="${r.id}" aria-hidden="true">${recording.duration ? recordingTime(recording.duration) : "Real recording"}</span></div>`;
+          return `<div class="sound-control-line"><button type="button" class="listen-button" data-listen-recording="${r.id}"${mystery ? ' data-mystery-sound="true"' : ""} aria-label="${mystery ? "Play mystery instrument recording" : "Play recording of " + escapeHTML(r.name)}" aria-pressed="false">${playIcon}<span data-listen-label>${mystery ? "PLAY MYSTERY SOUND" : "LISTEN"}</span></button><span class="sound-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></span><span class="recording-type">Real recording</span><span class="sound-time" data-sound-time="${r.id}" aria-hidden="true">${recording.duration ? recordingTime(recording.duration) : ""}</span></div>`;
         }
         function recordingNotice(message) {
           const notice = $("#recording-notice");
@@ -1355,9 +1355,7 @@
           $$("[data-sound-time]").forEach((label) => {
             if (label.dataset.soundTime !== currentRecordingId) {
               const recording = getRecording(label.dataset.soundTime);
-              label.textContent = recording?.duration
-                ? recordingTime(recording.duration)
-                : "Real recording";
+              label.textContent = recording?.duration ? recordingTime(recording.duration) : "";
             }
           });
           $$("[data-instrument-id]").forEach((card) =>
