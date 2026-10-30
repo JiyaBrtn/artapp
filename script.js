@@ -2658,20 +2658,4 @@
         scrollState();
         setupReveals();
         updateRecordingLibrary();
-        // 14. Hero video: keep it looping with sound off, but respect reduced motion.
-        const heroVideo = $(".hero-video");
-        if (heroVideo) {
-          const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-          const syncHeroVideo = () => {
-            if (reduceMotion.matches) {
-              heroVideo.pause();
-              heroVideo.removeAttribute("autoplay");
-            } else if (heroVideo.paused) {
-              heroVideo.play().catch(() => {});
-            }
-          };
-          heroVideo.muted = true;
-          syncHeroVideo();
-          reduceMotion.addEventListener("change", syncHeroVideo);
-        }
       })();
