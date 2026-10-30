@@ -3572,3 +3572,59 @@ html[data-theme="dark"] .insight-status.is-error {
     padding: 16px;
   }
 }
+
+/* Full-width mobile layout and centered instrument controls. */
+@media (max-width: 600px) {
+  .wrap {
+    width: 100%;
+    padding-inline: 18px;
+  }
+
+  #home .hero.wrap {
+    width: 100%;
+    padding: 25px 18px 0;
+  }
+
+  .collection-controls {
+    justify-content: center;
+  }
+
+  .instrument-collection .grid {
+    align-items: start;
+    column-gap: 16px;
+    row-gap: 36px;
+  }
+
+  .instrument-collection .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .instrument-collection .card-image {
+    margin-inline: auto;
+  }
+
+  .instrument-collection .sound-detail-link {
+    text-align: center;
+  }
+
+  .instrument-collection .sound-control-line {
+    justify-content: center;
+  }
+
+  .instrument-heading-line {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .instrument-heading .btn {
+    margin-inline: auto;
+  }
+
+  .category .btn {
+    align-self: center;
+    min-width: 88px;
+  }
+}
